@@ -126,7 +126,7 @@ filebeat.prospectors:
 #----------------------------- Http output --------------------------------
 output:
   http:
-    hosts: ["localhost:8081/test"]
+    hosts: ["localhost:8081/filebeatTest"]
 
 #================================ Logging =====================================
 
