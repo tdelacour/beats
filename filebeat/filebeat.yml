@@ -123,7 +123,7 @@ filebeat.prospectors:
   # Client Certificate Key
   #ssl.key: "/etc/pki/client/cert.key"
 
-#----------------------------- Logstash output --------------------------------
+#----------------------------- Http output --------------------------------
 output:
   http:
     hosts: ["localhost:8081/test"]
