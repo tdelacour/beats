@@ -95,6 +95,14 @@ func newRegistrarLogger(reg *registrar.Registrar) *registrarLogger {
 	}
 }
 
+// NOTE made public here
+func NewRegistrarLogger(reg *registrar.Registrar) *registrarLogger {
+	return &registrarLogger{
+		done: make(chan struct{}),
+		ch:   reg.Channel,
+	}
+}
+
 func (l *registrarLogger) Close() { close(l.done) }
 func (l *registrarLogger) Published(events []*input.Data) bool {
 	select {
@@ -108,6 +116,11 @@ func (l *registrarLogger) Published(events []*input.Data) bool {
 	case l.ch <- events:
 		return true
 	}
+}
+
+// NOTE this was made public
+func NewFinishedLogger(wg *sync.WaitGroup) *finishedLogger {
+	return &finishedLogger{wg}
 }
 
 func newFinishedLogger(wg *sync.WaitGroup) *finishedLogger {

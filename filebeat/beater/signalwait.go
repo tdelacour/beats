@@ -14,6 +14,13 @@ type signalWait struct {
 
 type signaler func()
 
+// NOTE this was made public
+func NewSignalWait() *signalWait {
+	return &signalWait{
+		signals: make(chan struct{}, 1),
+	}
+}
+
 func newSignalWait() *signalWait {
 	return &signalWait{
 		signals: make(chan struct{}, 1),
@@ -66,8 +73,21 @@ func waitTimer(t *time.Timer) signaler {
 	return func() { <-t.C }
 }
 
+// NOTE this was made public
+func WaitDuration(d time.Duration) signaler {
+	return waitTimer(time.NewTimer(d))
+}
+
 func waitDuration(d time.Duration) signaler {
 	return waitTimer(time.NewTimer(d))
+}
+
+// NOTE this was made public
+func WithLog(s signaler, msg string) signaler {
+	return func() {
+		s()
+		logp.Info("%v", msg)
+	}
 }
 
 func withLog(s signaler, msg string) signaler {
