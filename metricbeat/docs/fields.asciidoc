@@ -19,10 +19,14 @@ grouped in the following categories:
 * <<exported-fields-common>>
 * <<exported-fields-couchbase>>
 * <<exported-fields-docker>>
+* <<exported-fields-dropwizard>>
+* <<exported-fields-elasticsearch>>
 * <<exported-fields-golang>>
 * <<exported-fields-haproxy>>
 * <<exported-fields-jolokia>>
 * <<exported-fields-kafka>>
+* <<exported-fields-kibana>>
+* <<exported-fields-kubelet>>
 * <<exported-fields-memcached>>
 * <<exported-fields-mongodb>>
 * <<exported-fields-mysql>>
@@ -384,6 +388,12 @@ The hostname as returned by the operating system on which the Beat is running.
 
 
 [float]
+=== beat.timezone
+
+The timezone as returned by the operating system on which the Beat is running.
+
+
+[float]
 === beat.version
 
 The version of the beat that generated this event.
@@ -415,6 +425,37 @@ Arbitrary tags that can be set per Beat and per transaction type.
 type: object
 
 Contains user configurable fields.
+
+
+[float]
+== error Fields
+
+Error fields containing additional info in case of errors.
+
+
+
+[float]
+=== error.message
+
+type: text
+
+Error message.
+
+
+[float]
+=== error.code
+
+type: long
+
+Error code.
+
+
+[float]
+=== error.type
+
+type: keyword
+
+Error type.
 
 
 [[exported-fields-ceph]]
@@ -1833,6 +1874,355 @@ Total errors on outgoing packets.
 type: long
 
 Total number of outgoing packets.
+
+
+[[exported-fields-dropwizard]]
+== Dropwizard Fields
+
+beta[]
+Stats collected from Dropwizard.
+
+
+
+[float]
+== dropwizard Fields
+
+
+
+[[exported-fields-elasticsearch]]
+== elasticsearch Fields
+
+[]experimental
+elasticsearch Module
+
+
+
+[float]
+== elasticsearch Fields
+
+
+
+
+[float]
+=== elasticsearch.cluster.name
+
+type: keyword
+
+Elasticsearch cluster name.
+
+
+[float]
+== node Fields
+
+node
+
+
+
+[float]
+=== elasticsearch.node.jvm.memory.heap_init.bytes
+
+type: long
+
+format: bytes
+
+Heap init used by the JVM in bytes.
+
+
+[float]
+=== elasticsearch.node.jvm.version
+
+type: keyword
+
+JVM version.
+
+
+[float]
+=== elasticsearch.node.name
+
+type: keyword
+
+Node name.
+
+
+[float]
+=== elasticsearch.node.version
+
+type: keyword
+
+Node version.
+
+
+[float]
+== node_stats Fields
+
+node_stats
+
+
+
+[float]
+=== elasticsearch.node_stats.name
+
+type: keyword
+
+Node name.
+
+
+[float]
+== jvm.mem.pools Fields
+
+JVM memory pool stats
+
+
+
+[float]
+== old Fields
+
+Old memory pool stats.
+
+
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.old.max.bytes
+
+type: long
+
+format: bytes
+
+Max bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.old.peak.bytes
+
+type: long
+
+format: bytes
+
+Peak bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.old.peak_max.bytes
+
+type: long
+
+format: bytes
+
+Peak max bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.old.used.bytes
+
+type: long
+
+format: bytes
+
+Used bytes.
+
+[float]
+== young Fields
+
+Young memory pool stats.
+
+
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.young.max.bytes
+
+type: long
+
+format: bytes
+
+Max bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.young.peak.bytes
+
+type: long
+
+format: bytes
+
+Peak bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.young.peak_max.bytes
+
+type: long
+
+format: bytes
+
+Peak max bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.young.used.bytes
+
+type: long
+
+format: bytes
+
+Used bytes.
+
+[float]
+== survivor Fields
+
+Survivor memory pool stats.
+
+
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.survivor.max.bytes
+
+type: long
+
+format: bytes
+
+Max bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.survivor.peak.bytes
+
+type: long
+
+format: bytes
+
+Peak bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.survivor.peak_max.bytes
+
+type: long
+
+format: bytes
+
+Peak max bytes.
+
+[float]
+=== elasticsearch.node_stats.jvm.mem.pools.survivor.used.bytes
+
+type: long
+
+format: bytes
+
+Used bytes.
+
+[float]
+== gc.collectors Fields
+
+GC collector stats.
+
+
+
+[float]
+== old.collection Fields
+
+Old colletion gc.
+
+
+
+[float]
+=== elasticsearch.node_stats.gc.collectors.old.collection.count
+
+type: long
+
+
+
+[float]
+=== elasticsearch.node_stats.gc.collectors.old.collection.ms
+
+type: long
+
+
+
+[float]
+== young.collection Fields
+
+Young collection gc.
+
+
+
+[float]
+=== elasticsearch.node_stats.gc.collectors.young.collection.count
+
+type: long
+
+
+
+[float]
+=== elasticsearch.node_stats.gc.collectors.young.collection.ms
+
+type: long
+
+
+
+[float]
+== stats Fields
+
+stats
+
+
+
+[float]
+=== elasticsearch.stats.docs.count
+
+type: long
+
+Total number of existing documents.
+
+
+[float]
+=== elasticsearch.stats.docs.deleted
+
+type: long
+
+Total number of deleted documents.
+
+
+[float]
+=== elasticsearch.stats.segments.count
+
+type: long
+
+Total number of segments.
+
+
+[float]
+=== elasticsearch.stats.segments.memory.bytes
+
+type: long
+
+format: bytes
+
+Total size of segments in bytes.
+
+
+[float]
+=== elasticsearch.stats.shards.failed
+
+type: long
+
+Number of failed shards.
+
+
+[float]
+=== elasticsearch.stats.shards.successful
+
+type: long
+
+Number of successful shards.
+
+
+[float]
+=== elasticsearch.stats.shards.total
+
+type: long
+
+Total number of shards.
+
+
+[float]
+=== elasticsearch.stats.store.size.bytes
+
+type: long
+
+Total size of the store in bytes.
 
 
 [[exported-fields-golang]]
@@ -3321,6 +3711,186 @@ Broker id
 type: keyword
 
 Broker address
+
+
+[[exported-fields-kibana]]
+== kibana Fields
+
+[]experimental
+kibana Module
+
+
+
+[float]
+== kibana Fields
+
+
+
+
+[float]
+== status Fields
+
+Status fields
+
+
+
+[float]
+=== kibana.status.name
+
+type: keyword
+
+Kibana instance name.
+
+
+[float]
+=== kibana.status.uuid
+
+type: keyword
+
+Kibana instance uuid.
+
+
+[float]
+=== kibana.status.version.number
+
+type: keyword
+
+Kibana version number.
+
+
+[float]
+=== kibana.status.status.overall.state
+
+type: keyword
+
+Kibana overall state.
+
+
+[float]
+== metrics Fields
+
+Metrics fields
+
+
+
+[float]
+=== kibana.status.metrics.concurrent_connections
+
+type: long
+
+Current concurrent connections.
+
+
+[float]
+== requests Fields
+
+Request statistics.
+
+
+
+[float]
+=== kibana.status.metrics.requests.disconnects
+
+type: long
+
+Total number of disconnected connections.
+
+
+[float]
+=== kibana.status.metrics.requests.total
+
+type: long
+
+Total number of connections.
+
+
+[[exported-fields-kubelet]]
+== kubelet Fields
+
+beta[]
+kubelet Module
+
+
+
+[float]
+== kubelet Fields
+
+
+
+
+[float]
+== container Fields
+
+node
+
+
+
+[float]
+=== kubelet.container.example
+
+type: keyword
+
+Example field
+
+
+[float]
+== node Fields
+
+node
+
+
+
+[float]
+=== kubelet.node.example
+
+type: keyword
+
+Example field
+
+
+[float]
+== pod Fields
+
+node
+
+
+
+[float]
+=== kubelet.pod.example
+
+type: keyword
+
+Example field
+
+
+[float]
+== system Fields
+
+node
+
+
+
+[float]
+=== kubelet.system.example
+
+type: keyword
+
+Example field
+
+
+[float]
+== volume Fields
+
+node
+
+
+
+[float]
+=== kubelet.volume.example
+
+type: keyword
+
+Example field
 
 
 [[exported-fields-memcached]]
@@ -7529,40 +8099,6 @@ Name of the user running the process.
 [float]
 == windows Fields
 
-
-
-
-
-[float]
-== counters Fields
-
-Grouping of different counters
-
-
-
-[float]
-=== windows.perfmon.counters.group
-
-type: string
-
-Name of the group. For example `processor` or `disk`
-
-
-
-[float]
-=== windows.perfmon.counters.collectors.alias
-
-type: string
-
-Short form for the query
-
-
-[float]
-=== windows.perfmon.counters.collectors.query
-
-type: string
-
-The query. For example `\\Processor Information(_Total)\\% Processor Performance`. Backslashes have to be escaped.
 
 
 [[exported-fields-zookeeper]]

@@ -17,6 +17,9 @@ import (
 	"github.com/elastic/beats/filebeat/publisher"
 	"github.com/elastic/beats/filebeat/registrar"
 	"github.com/elastic/beats/filebeat/spooler"
+
+	//Add filebeat level processors
+	_ "github.com/elastic/beats/filebeat/processor/annotate/kubernetes"
 )
 
 var (
@@ -75,7 +78,11 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 func (fb *Filebeat) modulesSetup(b *beat.Beat) error {
 	esConfig := b.Config.Output["elasticsearch"]
 	if esConfig == nil || !esConfig.Enabled() {
-		return fmt.Errorf("Filebeat modules configured but the Elasticsearch output is not configured/enabled")
+		logp.Warn("Filebeat is unable to load the Ingest Node pipelines for the configured" +
+			" modules because the Elasticsearch output is not configured/enabled. If you have" +
+			" already loaded the Ingest Node pipelines or are using Logstash pipelines, you" +
+			" can ignore this warning.")
+		return nil
 	}
 	esClient, err := elasticsearch.NewConnectedClient(esConfig)
 	if err != nil {
@@ -177,6 +184,7 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 
 	err = crawler.Start(registrar, config.ProspectorReload)
 	if err != nil {
+		crawler.Stop()
 		return err
 	}
 

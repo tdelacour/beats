@@ -18,12 +18,15 @@ https://github.com/elastic/beats/compare/v5.1.1...master[Check the HEAD diff]
 - Configuration files must be owned by the user running the beat or by root, and
   they must not be writable by others. {pull}3544[3544] {pull}3689[3689]
 - Usage of field `_type` is now ignored and hardcoded to `doc`. {pull}3757[3757]
-- Change vendor manager from glide to govendor {pull}3851[3851]
+- Change vendor manager from glide to govendor. {pull}3851[3851]
+- Rename `error` field to `error.message`. {pull}3987[3987]
+- Change `dashboards.*` config options to `setup.dashboards.*`. {pull}3921[3921]
 
 *Filebeat*
 - Always use absolute path for event and registry. This can lead to issues when relative paths were used before. {pull}3328[3328]
 - Remove code to convert states from 1.x. {pull}3767[3767]
 - Remove deprecated config options force_close_files and close_older. {pull}3768[3768]
+- Change clean_removed behaviour to also remove states for files which cannot be found anymore under the same name. {pull}3827[3827]
 
 *Heartbeat*
 
@@ -32,10 +35,13 @@ https://github.com/elastic/beats/compare/v5.1.1...master[Check the HEAD diff]
   metricset. The configuration option for the feature was renamed from
   `cgroups` to `process.cgroups.enabled`. {pull}3519[3519]
 - Change fieldnames couchbase.node.couch.*.actual_disk_size.* to couchbase.node.couch.*.disk_size.* {pull}3545[3545]
+
 *Packetbeat*
 - Remove deprecated geoip. {pull}3766[3766]
+- Add experimental Kibana module. {pull}3895[3895]
 
 *Winlogbeat*
+- Remove metrics endpoint. Replaced by http endpoint in libbeat (see #3717). {pull}3901[3901]
 
 
 ==== Bugfixes
@@ -45,6 +51,7 @@ https://github.com/elastic/beats/compare/v5.1.1...master[Check the HEAD diff]
 - Add `_id`, `_type`, `_index` and `_score` fields in the generated index pattern. {pull}3282[3282]
 - Fix potential elasticsearch output URL parsing error if protocol scheme is missing. {pull}3671[3671]
 - Improve error message when downloading the dashboards fails. {pull}3805[3805]
+- Fix panic when testing regex-AST to match against date patterns. {issue}3889[3889]
 
 *Filebeat*
 - Always use absolute path for event and registry. {pull}3328[3328]
@@ -52,8 +59,14 @@ https://github.com/elastic/beats/compare/v5.1.1...master[Check the HEAD diff]
   filebeat.config_dir. {pull}3573[3573]
 - Fix empty registry file on machine crash. {issue}3537[3537]
 - Allow `-` in Apache access log byte count. {pull}3863[3863]
+- Downgrade Elasticsearch per batch item failure log to debug level. {issue}3953[3953]
+- Allow log lines without a program name in the Syslog fileset. {pull}3944[3944]
+- Fix panic in JSON decoding code if the input line is "null". {pull}4042[4042]
+- Properly shut down crawler in case one prospector is misconfigured. {pull}4037[4037]
 
 *Heartbeat*
+- Add default ports in HTTP monitor. {pull}3924[3924]
+- Use IP type of elasticsearch for ip field. {pull}3926[3926]
 
 *Metricbeat*
 
@@ -64,12 +77,13 @@ https://github.com/elastic/beats/compare/v5.1.1...master[Check the HEAD diff]
 - Add labels to the Docker healthcheck metricset output. {pull}3707[3707]
 - Make system process metricset honor the cpu_ticks config option. {issue}3590[3590]
 - Support common.Time in mapstriface.toTime() {pull}3812[3812]
-
+- Fixing panic on prometheus collector when label has , {pull}3947[3947]
 *Packetbeat*
 
 *Winlogbeat*
 
 - Fix handling of empty strings in event_data. {pull}3705[3705]
+- Fix null terminators include in raw XML string when include_xml is enabled. {pull}3943[3943]
 
 ==== Added
 
@@ -83,6 +97,12 @@ https://github.com/elastic/beats/compare/v5.1.1...master[Check the HEAD diff]
 - Disabled date detection in Elasticsearch index templates. Date fields must be explicitly defined in index templates. {pull}3528[3528]
 - Using environment variables in the configuration file is now GA, instead of experimental. {pull}3525[3525]
 - Initialize a beats UUID from file on startup. {pull}3615[3615]
+- Add new `add_locale` processor to export the local timezone with an event. {pull}3902[3902]
+- Add http endpoint. {pull}3717[3717]
+- Updated to Go 1.8.1. {pull}4033[4033]
+- Add kubernetes processor {pull}3888[3888]
+- Add support for include_labels and include_annotations in kubernetes processor {pull}4043[4043]
+- Support new `index_patterns` field when loading templates for Elasticsearch >= 6.0 {pull}4056[4056]
 
 *Filebeat*
 
@@ -92,6 +112,8 @@ https://github.com/elastic/beats/compare/v5.1.1...master[Check the HEAD diff]
 - close_timeout is also applied when the output is blocking. {pull}3511[3511]
 - Improve handling of different path variants on Windows. {pull}3781[3781]
 - Restructure input.Event to be inline with outputs.Data {pull}3823[3823]
+- Add base for supporting prospector level processors {pull}3853[3853]
+- Add auditd module for reading audit logs on Linux. {pull}3750[3750] {pull}3941[3941]
 
 *Heartbeat*
 
@@ -110,10 +132,17 @@ https://github.com/elastic/beats/compare/v5.1.1...master[Check the HEAD diff]
 - Add the ability to collect the environment variables from system processes. {pull}3337[3337]
 - Add experimental metricset `perfmon` to Windows module. {pull}3758[3758]
 - Add memcached module with stats metricset. {pull}3693[3693]
+- Add the `process.cmdline.cache.enabled` config option to the System Process Metricset. {pull}3891[3891]
+- Adding support for custom http headers and TLS for metricbeat modules {pull}3945[3945]
+- Add new MetricSet interfaces for developers (`Closer`, `ReportingFetcher`, and `PushMetricSet`). {pull}3908[3908]
+- Add kubelet module {pull}3916[3916]
+- Add dropwizard module {pull}4022[4022]
 
 *Packetbeat*
 - Add `fields` and `fields_under_root` to packetbeat protocols configurations. {pull}3518[3518]
-- Add list style packetbeat protocols configurations. This change supports specifying multiple configurations of the same protocol analyzer. {pull]3518[3518]
+- Add list style packetbeat protocols configurations. This change supports specifying multiple configurations of the same protocol analyzer. {pull}3518[3518]
+- Add DNS dashboard for an overview the DNS traffic. {pull}3883[3883]
+- Add DNS Tunneling dashboard to highlight domains with large numbers of subdomains or high data volume. {pull}3884[3884]
 
 *Winlogbeat*
 

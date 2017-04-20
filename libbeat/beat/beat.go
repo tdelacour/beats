@@ -46,6 +46,7 @@ import (
 	"github.com/satori/go.uuid"
 
 	"github.com/elastic/beats/filebeat/input/file"
+	"github.com/elastic/beats/libbeat/api"
 	"github.com/elastic/beats/libbeat/cfgfile"
 	"github.com/elastic/beats/libbeat/common"
 	"github.com/elastic/beats/libbeat/dashboards"
@@ -62,6 +63,8 @@ import (
 	// Register default processors.
 	_ "github.com/elastic/beats/libbeat/processors/actions"
 	_ "github.com/elastic/beats/libbeat/processors/add_cloud_metadata"
+	_ "github.com/elastic/beats/libbeat/processors/add_locale"
+	_ "github.com/elastic/beats/libbeat/processors/annotate/kubernetes"
 
 	// Register default monitoring reporting
 	_ "github.com/elastic/beats/libbeat/monitoring/report/elasticsearch"
@@ -109,7 +112,8 @@ type BeatConfig struct {
 	Logging    logp.Logging              `config:"logging"`
 	Processors processors.PluginConfig   `config:"processors"`
 	Path       paths.Path                `config:"path"`
-	Dashboards *common.Config            `config:"dashboards"`
+	Dashboards *common.Config            `config:"setup.dashboards"`
+	Http       *common.Config            `config:"http"`
 }
 
 var (
@@ -251,6 +255,10 @@ func (b *Beat) launch(bt Creator) error {
 	logp.Info("%s start running.", b.Info.Beat)
 	defer logp.Info("%s stopped.", b.Info.Beat)
 	defer logp.LogTotalExpvars(&b.Config.Logging)
+
+	if b.Config.Http.Enabled() {
+		api.Start(b.Config.Http, b.Info)
+	}
 
 	return beater.Run(b)
 }
